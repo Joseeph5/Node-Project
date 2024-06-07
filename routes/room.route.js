@@ -7,20 +7,21 @@ const {
   updateRoom,
   deleteRoom,
 } = require("../controllers/room.controller");
+const authenticateJWT = require("../middleware/auth");
 
 // Create a new room
-router.post("/", createRoom);
+router.post("/", authenticateJWT, createRoom);
 
 // Get all rooms
-router.get("/", getAllRooms);
+router.get("/", authenticateJWT, getAllRooms);
 
 // Get a single room by ID
-router.get("/:id", getRoomById);
+router.get("/:id", authenticateJWT, getRoomById);
 
 // Update a room by ID
-router.put("/:id", updateRoom);
+router.put("/:id", authenticateJWT, updateRoom);
 
 // Delete a room by ID
-router.delete("/:id", deleteRoom);
+router.delete("/:id", authenticateJWT, deleteRoom);
 
 module.exports = router;
