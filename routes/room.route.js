@@ -1,66 +1,26 @@
 const express = require("express");
 const router = express.Router();
+const {
+  createRoom,
+  getAllRooms,
+  getRoomById,
+  updateRoom,
+  deleteRoom,
+} = require("../controllers/room.controller");
 
-const Room = require("../models/room.model");
+// Create a new room
+router.post("/", createRoom);
 
-router.post("/", async (req, res) => {
-  const { name, capacity, amenities, price } = req.body;
-  try {
-    const newRoom = new Room({ name, capacity, amenities, price });
-    await newRoom.save();
-    res.status(201).json(newRoom);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+// Get all rooms
+router.get("/", getAllRooms);
 
-router.get("/", async (req, res) => {
-  try {
-    const rooms = await Room.find();
-    res.json(rooms);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Get a single room by ID
+router.get("/:id", getRoomById);
 
-router.get("/:id", async (req, res) => {
-  try {
-    const room = await Room.findById(req.params.id);
-    if (!room) return res.status(404).json({ message: "Room not found" });
-    res.json(room);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Update a room by ID
+router.put("/:id", updateRoom);
 
-router.put("/:id", async (req, res) => {
-  const { name, capacity, amenities, price } = req.body;
-  try {
-    const room = await Room.findById(req.params.id);
-    if (!room) return res.status(404).json({ message: "Room not found" });
-
-    room.name = name;
-    room.capacity = capacity;
-    room.amenities = amenities;
-    room.price = price;
-
-    await room.save();
-    res.json(room);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-router.delete("/:id", async (req, res) => {
-  try {
-    const room = await Room.findById(req.params.id);
-    if (!room) return res.status(404).json({ message: "Room not found" });
-
-    await room.remove();
-    res.json({ message: "Room deleted" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Delete a room by ID
+router.delete("/:id", deleteRoom);
 
 module.exports = router;
