@@ -2,9 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+const roomRoutes = require("./routes/room.route");
+
 const app = express();
 
 app.use(express.json());
+
+app.use("/rooms", roomRoutes);
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   console.log("Connected to MongoDB");
