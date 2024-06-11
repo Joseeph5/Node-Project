@@ -8,6 +8,7 @@ const {
   deleteRoom,
 } = require("../controllers/room.controller");
 const authenticateJWT = require("../middleware/auth");
+const roleCheck = require("../middleware/role");
 
 /**
  * @swagger
@@ -39,7 +40,6 @@ const authenticateJWT = require("../middleware/auth");
  *           type: number
  *           description: The price of the room
  *       example:
- *         id: d5fE_asz
  *         name: Conference Room
  *         capacity: 50
  *         amenities:
@@ -79,7 +79,7 @@ const authenticateJWT = require("../middleware/auth");
  *       500:
  *         description: Some server error
  */
-router.post("/", authenticateJWT, createRoom);
+router.post("/", authenticateJWT, roleCheck(["admin"]), createRoom);
 
 /**
  * @swagger
@@ -161,7 +161,7 @@ router.get("/:id", authenticateJWT, getRoomById);
  *       500:
  *         description: Some server error
  */
-router.put("/:id", authenticateJWT, updateRoom);
+router.put("/:id", authenticateJWT, roleCheck(["admin"]), updateRoom);
 
 /**
  * @swagger
@@ -184,6 +184,6 @@ router.put("/:id", authenticateJWT, updateRoom);
  *       404:
  *         description: The room was not found
  */
-router.delete("/:id", authenticateJWT, deleteRoom);
+router.delete("/:id", authenticateJWT, roleCheck(["admin"]), deleteRoom);
 
 module.exports = router;
