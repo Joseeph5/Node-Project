@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 require("dotenv").config();
+const swaggerSetup = require("./swagger");
 
 const roomRoutes = require("./routes/room.route");
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use("/rooms", roomRoutes);
 app.use("/auth", authRoutes);
+swaggerSetup(app);
 
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   console.log("Connected to MongoDB");
