@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 exports.register = async (req, res) => {
   const { username, password, role } = req.body;
@@ -17,22 +18,19 @@ exports.login = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Authentication failed. User not found." });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res
-        .status(401)
-        .json({ message: "Authentication failed. Wrong password." });
-    }
-    const token = jwt.sign(
-      { id: user._id, username: user.username },
-      process.env.SECRET_KEY,
-      { expiresIn: "1h" }
-    );
+
+    const payload = {
+      id: user._id,
+      username: user.username,
+      role: user.role,
+    };
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
     res.json({ token });
   } catch (error) {
     res.status(500).json({ message: error.message });

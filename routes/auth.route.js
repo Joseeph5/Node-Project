@@ -13,9 +13,6 @@ const authController = require("../controllers/auth.controller");
  *         - password
  *         - role
  *       properties:
- *         id:
- *           type: string
- *           description: The auto-generated id of the user
  *         username:
  *           type: string
  *           description: The username of the user
@@ -28,7 +25,6 @@ const authController = require("../controllers/auth.controller");
  *           enum: [admin, user]
  *           default: user
  *       example:
- *         id: d5fE_asz
  *         username: youssef
  *         password: securepassword
  *         role: user
