@@ -45,7 +45,6 @@ const roleCheck = require("../middleware/role");
  *         amenities:
  *           - Projector
  *           - Whiteboard
- *         price: 100
  */
 
 /**
